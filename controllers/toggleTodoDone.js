@@ -1,20 +1,18 @@
 const Todo = require("../models/Todo")
 
-exports.updateTodo = async (req, res) => {
+exports.toggleTodoDone = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { title, description } = req.body.data;
-
-        const todo = await Todo.findByIdAndUpdate(
-            { _id: id },
-            { title, description }
+        const todoRef = await Todo.findById(req.params.id);
+        const todo = await Todo.findOneAndUpdate(
+            { _id: req.params.id },
+            { done: !todoRef.done }
         )
-        await todo.save();
+        await todo.save()
         res.status(201).json(
             {
                 success: true,
                 data: todo,
-                message: "Updated Successfully"
+                message: "Entire todo data is fetched"
             })
     }
     catch (err) {
